@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 
+  final TextEditingController _searchController = TextEditingController();
+
 class PendingMembershipPage extends StatefulWidget {
   const PendingMembershipPage({super.key});
 
@@ -111,7 +113,7 @@ class _PendingMembershipPageState extends State<PendingMembershipPage> {
      appBar: AppBar(
         backgroundColor: Colors.blue,
         title: const Text(
-          "Membership",
+          "Membership Receipt",
           style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
@@ -133,18 +135,27 @@ class _PendingMembershipPageState extends State<PendingMembershipPage> {
           children: [
             Row(
               children: [
-                Expanded(
-                  child: TextField(
-                    decoration: InputDecoration(
-                      hintText: 'Search by Membership ID',
-                      prefixIcon: const Icon(Icons.search),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
+              Expanded(
+                child: TextField(
+                  controller: _searchController,
+                  decoration: InputDecoration(
+                    labelText: "Search by Membership ID",
+                    prefixIcon: const Icon(Icons.search),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(color: Colors.grey),
+                      borderRadius: BorderRadius.circular(12),
                     ),
-                    onChanged: _filterPayments,
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(color: Colors.blue, width: 2),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
+                  onChanged: _filterPayments,
                 ),
+              ),
                 const SizedBox(width: 10),
                 PopupMenuButton<String>(
                   icon: const Icon(Icons.filter_alt_outlined),
@@ -224,53 +235,68 @@ class _PendingMembershipPageState extends State<PendingMembershipPage> {
             ),
             const SizedBox(height: 16),
 
-            Expanded(
-              child: _filteredPayments.isEmpty
-                  ? const Center(child: Text("No membership payments match the filter."))
-                  : ListView.builder(
-                      itemCount: _filteredPayments.length,
-                      itemBuilder: (context, index) {
-                        final payment = _filteredPayments[index];
-                        final formattedDate = DateFormat.yMMMMd().add_jm().format(DateTime.parse(payment['date']!));
-                        return Card(
-                          margin: const EdgeInsets.only(bottom: 10),
-                          child: ListTile(
-                            leading: const CircleAvatar(child: Icon(Icons.person)),
-                            title: Text("Membership Payment\n${payment['name']}"),
-                            subtitle: Text(formattedDate),
-                            trailing: Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                Text(
-                                  payment['status']!,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: _getStatusColor(payment['status']!),
-                                  ),
-                                ),
-                                if (showNew)
-                                  TextButton(
-                                    style: TextButton.styleFrom(
-                                      padding: EdgeInsets.zero,
-                                      minimumSize: Size.zero,
-                                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                    ),
-                                    onPressed: () {
-                                      Navigator.pushNamed(
-                                        context,
-                                        '/pendingMSReceipt',
-                                        arguments: {'date': payment['date']},
-                                      );
-                                    },
-                                    child: const Text("View Details"),
-                                  ),
-                              ],
-                            ),
-                          ),
+Expanded(
+  child: _filteredPayments.isEmpty
+      ? const Center(child: Text("No membership payments match the filter."))
+      : ListView.separated(
+          itemCount: _filteredPayments.length,
+          separatorBuilder: (_, __) => Divider(
+            color: Colors.grey.shade300,
+            thickness: 1,
+            indent: 16,
+            endIndent: 16,
+          ),
+          itemBuilder: (context, index) {
+            final payment = _filteredPayments[index];
+            final formattedDate = DateFormat.yMMMMd().add_jm().format(DateTime.parse(payment['date']!));
+
+            return ListTile(
+              contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              leading: CircleAvatar(
+                backgroundColor: Colors.indigo.shade100,
+                child: Icon(Icons.person, color: Colors.indigo.shade700),
+              ),
+              title: Text(
+                "Membership Payment\n${payment['name']}",
+                style: const TextStyle(fontWeight: FontWeight.w600),
+              ),
+              subtitle: Text(formattedDate),
+              trailing: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    payment['status']!,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: _getStatusColor(payment['status']!),
+                    ),
+                  ),
+                  if (showNew)
+                    TextButton(
+                      style: TextButton.styleFrom(
+                        padding: EdgeInsets.zero,
+                        minimumSize: Size.zero,
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      ),
+                      onPressed: () {
+                        Navigator.pushNamed(
+                          context,
+                          '/pendingMSReceipt',
+                          arguments: {'date': payment['date']},
                         );
                       },
+                      child: const Text("View Details"),
                     ),
-            ),
+                ],
+              ),
+            );
+          },
+        ),
+),
           ],
         ),
       ),

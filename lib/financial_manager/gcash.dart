@@ -1,7 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'components/custom_app_bar.dart';
 
 class GCashReceiptPage extends StatelessWidget {
   const GCashReceiptPage({super.key});
@@ -68,10 +67,24 @@ class GCashReceiptPage extends StatelessWidget {
     final dateTime = DateFormat('MMM dd, yyyy h:mm a').format(DateTime.now());
 
     return Scaffold(
-      appBar: CustomAppBar(
-        title: 'GCash Receipt',
-        showBackButton: true,
-        titleStyle: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+      appBar: AppBar(
+        backgroundColor: Colors.blue,
+        title: const Text(
+          "GCash Receipt",
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+          ),
+        ),
+        leading: Tooltip(
+          message: 'Back',
+          child: IconButton(
+            icon: const Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () => Navigator.pop(context),
+          ),
+        ),
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
       backgroundColor: const Color.fromARGB(255, 28, 105, 165),
       body: Center(

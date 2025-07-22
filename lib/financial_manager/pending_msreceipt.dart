@@ -1,7 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 
-
 class PendingMSReceiptPage extends StatefulWidget {
   const PendingMSReceiptPage({super.key});
 
@@ -11,6 +10,7 @@ class PendingMSReceiptPage extends StatefulWidget {
 
 class _MembershipReceiptPageState extends State<PendingMSReceiptPage> {
   String _selectedStatus = 'Approved';
+  bool _isHovering = false;
 
   @override
   Widget build(BuildContext context) {
@@ -49,118 +49,114 @@ class _MembershipReceiptPageState extends State<PendingMSReceiptPage> {
       body: ListView(
         padding: const EdgeInsets.all(16.0),
         children: [
-          Card(
-            elevation: 4,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Center(
+          Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.blue, width: 1.5),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+                    color: Colors.white,
+                  ),
+                  child: const Center(
                     child: Text(
                       "MEMBERSHIP FEE RECEIPT",
                       style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                   ),
-                  const SizedBox(height: 16),
-                  Text("Receipt No.: $receiptNumber"),
-                  Text("Date: $date"),
-                  const SizedBox(height: 16),
-                  Container(
-                    color: Colors.grey.shade200,
-                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
-                    child: Row(
-                      children: const [
-                        Expanded(flex: 1, child: Text("NO.", style: TextStyle(fontWeight: FontWeight.bold))),
-                        Expanded(flex: 3, child: Text("DESCRIPTION", style: TextStyle(fontWeight: FontWeight.bold))),
-                        Expanded(flex: 2, child: Text("AMOUNT", style: TextStyle(fontWeight: FontWeight.bold))),
-                      ],
-                    ),
-                  ),
-                  const Divider(height: 0),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
-                    child: Row(
-                      children: [
-                        const Expanded(flex: 1, child: Text("01")),
-                        const Expanded(flex: 3, child: Text("Membership Fee")),
-                        Expanded(flex: 2, child: Text("₱ ${membershipFee.toStringAsFixed(2)}")),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
-                    child: Row(
-                      children: [
-                        const Expanded(flex: 1, child: Text("02")),
-                        const Expanded(flex: 3, child: Text("Additional Fees")),
-                        Expanded(flex: 2, child: Text("₱ ${additionalFees.toStringAsFixed(2)}")),
-                      ],
-                    ),
-                  ),
-                  const Divider(),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    child: Row(
-                      children: [
-                        const Expanded(flex: 4, child: Align(alignment: Alignment.centerRight, child: Text("SUB TOTAL:"))),
-                        Expanded(flex: 2, child: Align(alignment: Alignment.centerRight, child: Text("₱ ${subtotal.toStringAsFixed(2)}"))),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    child: Row(
-                      children: const [
-                        Expanded(flex: 4, child: Align(alignment: Alignment.centerRight, child: Text("TAX RATE:"))),
-                        Expanded(flex: 2, child: Align(alignment: Alignment.centerRight, child: Text("5%"))),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    child: Row(
-                      children: [
-                        const Expanded(flex: 4, child: Align(alignment: Alignment.centerRight, child: Text("TAX AMOUNT:"))),
-                        Expanded(flex: 2, child: Align(alignment: Alignment.centerRight, child: Text("₱ ${taxAmount.toStringAsFixed(2)}"))),
-                      ],
-                    ),
-                  ),
-                  const Divider(),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                    child: Row(
-                      children: [
-                        const Expanded(
-                          flex: 4,
-                          child: Align(
-                            alignment: Alignment.centerRight,
-                            child: Text(
-                              "TOTAL AMOUNT:",
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                const Divider(height: 0),
+                Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Receipt No.: $receiptNumber"),
+                      Text("Date: $date"),
+                      const SizedBox(height: 16),
+                      Container(
+                        color: Colors.grey.shade200,
+                        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+                        child: Row(
+                          children: const [
+                            Expanded(flex: 1, child: Text("NO.", style: TextStyle(fontWeight: FontWeight.bold))),
+                            Expanded(flex: 3, child: Text("DESCRIPTION", style: TextStyle(fontWeight: FontWeight.bold))),
+                            Expanded(flex: 2, child: Text("AMOUNT", style: TextStyle(fontWeight: FontWeight.bold))),
+                          ],
+                        ),
+                      ),
+                      const Divider(height: 0),
+                      Row(
+                        children: [
+                          const Expanded(flex: 1, child: Padding(padding: EdgeInsets.all(8), child: Text("01"))),
+                          const Expanded(flex: 3, child: Padding(padding: EdgeInsets.all(8), child: Text("Membership Fee"))),
+                          Expanded(flex: 2, child: Padding(padding: const EdgeInsets.all(8), child: Text("₱ ${membershipFee.toStringAsFixed(2)}"))),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          const Expanded(flex: 1, child: Padding(padding: EdgeInsets.all(8), child: Text("02"))),
+                          const Expanded(flex: 3, child: Padding(padding: EdgeInsets.all(8), child: Text("Additional Fees"))),
+                          Expanded(flex: 2, child: Padding(padding: const EdgeInsets.all(8), child: Text("₱ ${additionalFees.toStringAsFixed(2)}"))),
+                        ],
+                      ),
+                      const Divider(),
+                      Row(
+                        children: [
+                          const Expanded(flex: 4, child: Align(alignment: Alignment.centerRight, child: Text("SUB TOTAL:"))),
+                          Expanded(flex: 2, child: Align(alignment: Alignment.centerRight, child: Text("₱ ${subtotal.toStringAsFixed(2)}"))),
+                        ],
+                      ),
+                      Row(
+                        children: const [
+                          Expanded(flex: 4, child: Align(alignment: Alignment.centerRight, child: Text("TAX RATE:"))),
+                          Expanded(flex: 2, child: Align(alignment: Alignment.centerRight, child: Text("5%"))),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          const Expanded(flex: 4, child: Align(alignment: Alignment.centerRight, child: Text("TAX AMOUNT:"))),
+                          Expanded(flex: 2, child: Align(alignment: Alignment.centerRight, child: Text("₱ ${taxAmount.toStringAsFixed(2)}"))),
+                        ],
+                      ),
+                      const Divider(),
+                      Row(
+                        children: [
+                          const Expanded(
+                            flex: 4,
+                            child: Align(
+                              alignment: Alignment.centerRight,
+                              child: Text(
+                                "TOTAL AMOUNT:",
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
                             ),
                           ),
-                        ),
-                        Expanded(
-                          flex: 2,
-                          child: Align(
-                            alignment: Alignment.centerRight,
-                            child: Text(
-                              "₱ ${total.toStringAsFixed(2)}",
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                          Expanded(
+                            flex: 2,
+                            child: Align(
+                              alignment: Alignment.centerRight,
+                              child: Text(
+                                "₱ ${total.toStringAsFixed(2)}",
+                                style: const TextStyle(fontWeight: FontWeight.bold),
+                              ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
+                        ],
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
           const SizedBox(height: 24),
-
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 32.0),
             child: Row(
@@ -169,7 +165,7 @@ class _MembershipReceiptPageState extends State<PendingMSReceiptPage> {
                 TextButton.icon(
                   onPressed: () {
                     Navigator.pushNamed(context, '/gcashReceipt', arguments: {
-                      'name': 'Maria Santos', 
+                      'name': 'Maria Santos',
                     });
                   },
                   icon: const Icon(Icons.receipt_long_outlined, color: Colors.indigo),
@@ -178,7 +174,6 @@ class _MembershipReceiptPageState extends State<PendingMSReceiptPage> {
                     style: TextStyle(color: Colors.indigo, fontWeight: FontWeight.w500),
                   ),
                 ),
-
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -246,25 +241,27 @@ class _MembershipReceiptPageState extends State<PendingMSReceiptPage> {
                       ),
                     ),
                     const SizedBox(width: 12),
-                    Container(
-                      height: 30,
-                      width: 1,
-                      color: Colors.grey.shade300,
-                    ),
+                    Container(height: 30, width: 1, color: Colors.grey.shade300),
                     const SizedBox(width: 12),
-                    GestureDetector(
-                      onTap: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Status updated to $_selectedStatus')),
-                        );
-                        Navigator.pop(context);
-                      },
-                      child: Text(
-                        "OK",
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.blue.shade700,
-                          fontWeight: FontWeight.w600,
+                    MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      onEnter: (_) => setState(() => _isHovering = true),
+                      onExit: (_) => setState(() => _isHovering = false),
+                      child: GestureDetector(
+                        onTap: () {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Status updated to $_selectedStatus')),
+                          );
+                          Navigator.pop(context);
+                        },
+                        child: Text(
+                          "OK",
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: _isHovering ? Colors.blue.shade900 : Colors.blue.shade700,
+                            fontWeight: FontWeight.w600,
+                            decoration: _isHovering ? TextDecoration.underline : TextDecoration.none,
+                          ),
                         ),
                       ),
                     ),

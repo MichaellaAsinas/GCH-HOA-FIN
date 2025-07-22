@@ -106,15 +106,6 @@ class _PendingMonthlyDuesPageState extends State<PendingMonthlyDuesPage> {
     });
   }
 
-  void _clearFilters() {
-    setState(() {
-      _selectedYear = null;
-      _searchQuery = "";
-      _sortOption = "Recent";
-      _searchController.clear();
-      _applyFilters();
-    });
-  }
 
   void _pickYear() async {
     FocusScope.of(context).unfocus();
@@ -211,29 +202,34 @@ class _PendingMonthlyDuesPageState extends State<PendingMonthlyDuesPage> {
                       });
                     }
                   },
-                  itemBuilder: (context) => const [
-                    PopupMenuItem(value: "Year", child: Text("Filter by Year")),
-                    PopupMenuDivider(),
-                    PopupMenuItem(value: "Recent", child: Text("Sort: Recent")),
-                    PopupMenuItem(value: "Oldest", child: Text("Sort: Oldest")),
-                    PopupMenuItem(value: "A-Z", child: Text("Sort: ID A-Z")),
-                    PopupMenuItem(value: "Z-A", child: Text("Sort: ID Z-A")),
+                  itemBuilder: (context) => [
+                    const PopupMenuItem(value: "Year", child: Text("Filter by Year")),
+                    const PopupMenuItem(value: "Recent", child: Text("Recent")),
+                    const PopupMenuItem(value: "Oldest", child: Text("Oldest")),
+                    const PopupMenuItem(value: "A-Z", child: Text("ID A-Z")),
+                    const PopupMenuItem(value: "Z-A", child: Text("ID Z-A")),
+                    const PopupMenuItem(value: "Ascending", child: Text("Date Ascending")),
+                    const PopupMenuItem(value: "Descending", child: Text("Date Descending")),
                   ],
                 ),
               ],
             ),
-            
-            // --- Clear Filter Button ---
             if (_selectedYear != null || _searchQuery.isNotEmpty || _sortOption != "Recent")
               Align(
                 alignment: Alignment.centerRight,
                 child: TextButton.icon(
-                  onPressed: _clearFilters,
-                  icon: const Icon(Icons.cancel, color: Colors.redAccent, size: 18),
+                  onPressed: () {
+                    setState(() {
+                      _selectedYear = null;
+                      _searchQuery = "";
+                      _sortOption = "Recent";
+                      _applyFilters();
+                    });
+                  },
+                  icon: const Icon(Icons.cancel, color: Colors.redAccent),
                   label: const Text("Clear Filter", style: TextStyle(color: Colors.redAccent)),
                 ),
               ),
-            
             const SizedBox(height: 16),
 
             // --- Tab Buttons (New / History) ---
@@ -275,85 +271,87 @@ class _PendingMonthlyDuesPageState extends State<PendingMonthlyDuesPage> {
             const SizedBox(height: 16),
 
             // --- List of Dues ---
-            Expanded(
-              child: _filteredDues.isEmpty
-                  ? const Center(child: Text("No monthly dues payments match the filter."))
-                                : ListView.builder(
-                                itemCount: _filteredDues.length,
-                                itemBuilder: (context, index) {
-                                  final dues = _filteredDues[index];
-                                  final formattedDate = DateFormat.yMMMMd().add_jm().format(DateTime.parse(dues['date']!));
+Expanded(
+  child: _filteredDues.isEmpty
+      ? const Center(child: Text("No membership payments match the filter."))
+      : ListView.builder(
+          itemCount: _filteredDues.length,
+          itemBuilder: (context, index) {
+            final payment = _filteredDues[index];
+            final formattedDate = DateFormat.yMMMMd().add_jm().format(DateTime.parse(payment['date']!));
 
-                                  return Column(
-                                    children: [
-                                      Container(
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius: BorderRadius.circular(12),
-                                        ),
-                                        margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 0),
-                                        child: ListTile(
-                                          contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(12),
-                                          ),
-                                          leading: const CircleAvatar(
-                                            backgroundColor: Color(0xFFD1C4E9),
-                                            child: Icon(Icons.person, color: Color(0xFF512DA8)),
-                                          ),
-                                          title: Text(
-                                            "Monthly Dues Payment\n${dues['name']}",
-                                            style: const TextStyle(fontWeight: FontWeight.w600),
-                                          ),
-                                          subtitle: Text(formattedDate),
-                                          trailing: IntrinsicWidth(
-                                            child: Align(
-                                              alignment: Alignment.centerRight,
-                                              child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.end,
-                                                mainAxisAlignment: MainAxisAlignment.center,
-                                                children: [
-                                                  Text(
-                                                    dues['status']!,
-                                                    style: TextStyle(
-                                                      fontWeight: FontWeight.bold,
-                                                      color: _getStatusColor(dues['status']!),
-                                                    ),
-                                                  ),
-                                                  if (showNew)
-                                                    TextButton(
-                                                      style: TextButton.styleFrom(
-                                                        padding: EdgeInsets.zero,
-                                                        minimumSize: Size.zero,
-                                                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                                      ),
-                                                      onPressed: () {
-                                                        Navigator.pushNamed(
-                                                          context,
-                                                          '/pendingMonthlyDuesReceipt',
-                                                          arguments: {'date': dues['date']},
-                                                        );
-                                                      },
-                                                      child: const Text("View Details"),
-                                                    ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      const Divider(
-                                        height: 1,
-                                        thickness: 1,
-                                        indent: 16,
-                                        endIndent: 16,
-                                        color: Colors.grey,
-                                      ),
-                                    ],
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Material(
+                  elevation: 1,
+                  borderRadius: BorderRadius.circular(12),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                    child: ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      leading: const CircleAvatar(
+                        backgroundColor: Color(0xFFD1C4E9),
+                        child: Icon(Icons.person, color: Color(0xFF512DA8)),
+                      ),
+                      title: Text(
+                        "Membership Payment\n${payment['name']}",
+                        style: const TextStyle(fontWeight: FontWeight.w600),
+                      ),
+                      subtitle: Text(formattedDate),
+                      trailing: IntrinsicWidth(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              payment['status']!,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: _getStatusColor(payment['status']!),
+                              ),
+                            ),
+                            if (showNew)
+                              TextButton(
+                                style: TextButton.styleFrom(
+                                  padding: EdgeInsets.zero,
+                                  minimumSize: Size.zero,
+                                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                ),
+                                onPressed: () {
+                                  Navigator.pushNamed(
+                                    context,
+                                    '/pendingMSReceipt',
+                                    arguments: {'date': payment['date']},
                                   );
                                 },
+                                child: const Text("View Details"),
                               ),
-            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 4),
+                  child: Divider(
+                    thickness: 1,
+                    indent: 0,
+                    endIndent: 0,
+                    color: Colors.grey,
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
+),
+
           ],
         ),
       ),
