@@ -284,13 +284,7 @@ Expanded(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Material(
-                  elevation: 1,
-                  borderRadius: BorderRadius.circular(12),
                   child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
                     padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                     child: ListTile(
                       contentPadding: EdgeInsets.zero,
