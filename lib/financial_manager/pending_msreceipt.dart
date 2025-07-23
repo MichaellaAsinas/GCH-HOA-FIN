@@ -158,85 +158,94 @@ class _MembershipReceiptPageState extends State<PendingMSReceiptPage> {
           ),
           const SizedBox(height: 24),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 32.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Column(
               children: [
-                TextButton.icon(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/gcashReceipt', arguments: {
-                      'name': 'Maria Santos',
-                    });
-                  },
-                  icon: const Icon(Icons.receipt_long_outlined, color: Colors.indigo),
-                  label: const Text(
-                    "GCash Receipt",
-                    style: TextStyle(color: Colors.indigo, fontWeight: FontWeight.w500),
-                  ),
-                ),
                 Row(
-                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        border: Border.all(color: Colors.grey.shade300),
-                        borderRadius: BorderRadius.circular(8),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.1),
-                            blurRadius: 6,
-                            offset: const Offset(0, 3),
-                          ),
-                        ],
+                    Expanded(
+                      child: TextButton.icon(
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/gcashReceipt', arguments: {
+                            'name': 'Maria Santos',
+                          });
+                        },
+                        icon: const Icon(Icons.receipt_long_outlined, color: Colors.indigo),
+                        label: const Text(
+                          "GCash Receipt",
+                          style: TextStyle(color: Colors.indigo, fontWeight: FontWeight.w500),
+                        ),
                       ),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton<String>(
-                          value: _selectedStatus,
-                          icon: const Icon(Icons.keyboard_arrow_down_rounded),
-                          style: const TextStyle(fontSize: 14, color: Colors.black),
-                          items: ['Approved', 'Declined', 'Pending'].map((status) {
-                            IconData icon;
-                            Color color;
-                            switch (status) {
-                              case 'Approved':
-                                icon = Icons.check_circle_outline;
-                                color = Colors.green;
-                                break;
-                              case 'Declined':
-                                icon = Icons.cancel_outlined;
-                                color = Colors.red;
-                                break;
-                              default:
-                                icon = Icons.hourglass_bottom_outlined;
-                                color = Colors.orange;
-                            }
-                            return DropdownMenuItem<String>(
-                              value: status,
-                              child: Row(
-                                children: [
-                                  Icon(icon, color: color, size: 16),
-                                  const SizedBox(width: 8),
-                                  Text(status),
-                                ],
-                              ),
-                            );
-                          }).toList(),
-                          onChanged: (value) {
-                            if (value != null) {
-                              setState(() {
-                                _selectedStatus = value;
-                              });
-                              if (value == 'Approved') {
-                                Navigator.pushReplacementNamed(
-                                  context,
-                                  '/membershipReceipt',
-                                  arguments: {'date': date},
-                                );
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Flexible(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(color: Colors.grey.shade300),
+                          borderRadius: BorderRadius.circular(8),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.1),
+                              blurRadius: 6,
+                              offset: const Offset(0, 3),
+                            ),
+                          ],
+                        ),
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton<String>(
+                            value: _selectedStatus,
+                            icon: const Icon(Icons.keyboard_arrow_down_rounded),
+                            style: const TextStyle(fontSize: 14, color: Colors.black),
+                            items: ['Approved', 'Declined', 'Pending'].map((status) {
+                              IconData icon;
+                              Color color;
+                              switch (status) {
+                                case 'Approved':
+                                  icon = Icons.check_circle_outline;
+                                  color = Colors.green;
+                                  break;
+                                case 'Declined':
+                                  icon = Icons.cancel_outlined;
+                                  color = Colors.red;
+                                  break;
+                                default:
+                                  icon = Icons.hourglass_bottom_outlined;
+                                  color = Colors.orange;
                               }
-                            }
-                          },
+                              return DropdownMenuItem<String>(
+                                value: status,
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(icon, color: color, size: 16),
+                                    const SizedBox(width: 8),
+                                    Text(status),
+                                  ],
+                                ),
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              if (value != null) {
+                                setState(() {
+                                  _selectedStatus = value;
+                                });
+                                if (value == 'Approved') {
+                                  Navigator.pushReplacementNamed(
+                                    context,
+                                    '/membershipReceipt',
+                                    arguments: {'date': date},
+                                  );
+                                }
+                              }
+                            },
+                          ),
                         ),
                       ),
                     ),

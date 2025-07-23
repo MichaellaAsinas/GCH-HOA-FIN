@@ -220,47 +220,73 @@ class _DashboardPageState extends State<DashboardPage> {
                       ),
                     ),
                     const SizedBox(height: 30),
-                    GridView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: icons.length,
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: crossAxisCount,
-                        mainAxisSpacing: 12,
-                        crossAxisSpacing: 12,
-                        childAspectRatio: 1.1,
+                    const Text(
+                      "Services",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
                       ),
-                      itemBuilder: (context, index) {
-                        return SizedBox(
-                          height: 100,
-                          child: ElevatedButton(
-                            onPressed: () => _navigateToFunction(labels[index]),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.white,
-                              foregroundColor: Colors.black,
-                              padding: const EdgeInsets.all(12),
-                              elevation: 3,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                side: BorderSide(color: Colors.blue.shade100, width: 1),
+                    ),
+                    const SizedBox(height: 20),
+                    LayoutBuilder(
+                      builder: (context, constraints) {
+                        return GridView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: icons.length,
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: crossAxisCount,
+                            mainAxisSpacing: 12,
+                            crossAxisSpacing: 12,
+                            childAspectRatio: constraints.maxWidth > 600 ? 1.1 : 0.9,
+                          ),
+                          itemBuilder: (context, index) {
+                            return Container(
+                              constraints: const BoxConstraints(
+                                minHeight: 80,
+                                maxHeight: 120,
                               ),
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(icons[index], size: 30, color: Colors.blue),
-                                const SizedBox(height: 8),
-                                Text(
-                                  labels[index],
-                                  textAlign: TextAlign.center,
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 8,
+                              child: ElevatedButton(
+                                onPressed: () => _navigateToFunction(labels[index]),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.white,
+                                  foregroundColor: customPrimaryColor,
+                                  padding: const EdgeInsets.all(8),
+                                  elevation: 4,
+                                  shadowColor: Colors.blue.withOpacity(0.3),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                    side: BorderSide(color: customPrimaryColor.withOpacity(0.3), width: 1.5),
                                   ),
                                 ),
-                              ],
-                            ),
-                          ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(
+                                      icons[index], 
+                                      size: constraints.maxWidth > 600 ? 28 : 24, 
+                                      color: customPrimaryColor,
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Flexible(
+                                      child: Text(
+                                        labels[index],
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: constraints.maxWidth > 600 ? 10 : 8,
+                                          color: customPrimaryColor,
+                                        ),
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
                         );
                       },
                     ),
@@ -382,34 +408,48 @@ class _HoverZoomCardState extends State<_HoverZoomCard> {
             children: [
               ClipRRect(
                 borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
-                child: Image.asset(
-                  widget.image,
+                child: Container(
                   width: double.infinity,
                   height: 140,
-                  fit: BoxFit.contain,
+                  color: Colors.grey.shade50,
+                  child: Center(
+                    child: Image.asset(
+                      widget.image,
+                      fit: BoxFit.contain,
+                      width: double.infinity,
+                      height: 140,
+                    ),
+                  ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      widget.title,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.blue,
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        widget.title,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.blue,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      widget.desc,
-                      style: const TextStyle(fontSize: 14, color: Colors.black87),
-                      maxLines: 3,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
+                      const SizedBox(height: 6),
+                      Flexible(
+                        child: Text(
+                          widget.desc,
+                          style: const TextStyle(fontSize: 14, color: Colors.black87),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],
