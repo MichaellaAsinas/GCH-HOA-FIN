@@ -79,7 +79,16 @@ class AnnouncementPage extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Icon(Icons.notifications_active, color: Colors.blueAccent),
+                Container(
+                  width: 40,
+                  height: 40,
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Colors.blue.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Icon(Icons.attach_money, color: Colors.blue),
+                ),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Column(

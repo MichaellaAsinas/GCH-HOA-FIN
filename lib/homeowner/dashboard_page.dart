@@ -79,21 +79,48 @@ class _DashboardPageState extends State<DashboardPage> {
         title: const Text("Notifications"),
         content: Column(
           mainAxisSize: MainAxisSize.min,
-          children: const [
+          children: [
             ListTile(
-              leading: Icon(Icons.notifications),
-              title: Text("Your bill for July is ready."),
-              subtitle: Text("2 hours ago"),
+              leading: Container(
+                width: 40,
+                height: 40,
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: customPrimaryColor.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Icon(Icons.attach_money, color: customPrimaryColor),
+              ),
+              title: const Text("Your bill for July is ready."),
+              subtitle: const Text("2 hours ago"),
             ),
             ListTile(
-              leading: Icon(Icons.notifications),
-              title: Text("Vehicle Sticker approved."),
-              subtitle: Text("Yesterday"),
+              leading: Container(
+                width: 40,
+                height: 40,
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: customPrimaryColor.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Icon(Icons.directions_car, color: customPrimaryColor),
+              ),
+              title: const Text("Vehicle Sticker approved."),
+              subtitle: const Text("Yesterday"),
             ),
             ListTile(
-              leading: Icon(Icons.notifications),
-              title: Text("Facility booking confirmed."),
-              subtitle: Text("3 days ago"),
+              leading: Container(
+                width: 40,
+                height: 40,
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: customPrimaryColor.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Icon(Icons.home, color: customPrimaryColor),
+              ),
+              title: const Text("Facility booking confirmed."),
+              subtitle: const Text("3 days ago"),
             ),
           ],
         ),
